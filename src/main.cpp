@@ -1,6 +1,6 @@
 //<tec aett sixtopia.net>
 //Simple Controllio based EBMPapst EC fan controller
-//with integrated Web-Server
+//with integrated Web-Server and MQTT Client
 
 #include <SPI.h>
 #include <Ethernet.h>
@@ -8,15 +8,15 @@
 #include <PubSubClient.h>
 
 
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-IPAddress ip(10, 100, 0, 177);
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; // MAC Address
+IPAddress ip(10, 100, 0, 177); // IP Address of your Controllino
 EthernetServer server(80);
 
 // MQTT Broker settings
-const char* mqttServer = "10.22.5.5";
-const int mqttPort = 1883;
-const char* mqttUser = "mqtt";  // Replace with your MQTT username
-const char* mqttPassword = "k-u9xedDZoizdMRh";  // Replace with your MQTT password
+const char* mqttServer = ""; // MQTT broker IP
+const int mqttPort = 1883; // MQTT broker Port
+const char* mqttUser = "";  // Replace with your MQTT username
+const char* mqttPassword = "";  // Replace with your MQTT password
 
 const int ledPin = CONTROLLINO_D0;
 int lastPwmValue = 0;
