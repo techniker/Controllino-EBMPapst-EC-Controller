@@ -1,6 +1,6 @@
 //<tec aett sixtopia.net>
 //Simple Controllio based EBMPapst EC fan controller
-//with integrated Web-Server
+//with integrated Web-Server and MQTT Client
 
 #include <SPI.h>
 #include <Ethernet.h>
