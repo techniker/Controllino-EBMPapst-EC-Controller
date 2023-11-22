@@ -19,7 +19,7 @@ const char* mqttUser = "";  // Replace with your MQTT username
 const char* mqttPassword = "";  // Replace with your MQTT password
 
 const int ledPin = CONTROLLINO_D0;
-int lastPwmValue = 0;
+int lastPwmValue = 0; // Set initial PWM value
 
 EthernetClient ethClient;
 PubSubClient mqttClient(ethClient);
@@ -48,7 +48,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 void connectToMqtt() {
   while (!mqttClient.connected()) {
     Serial.println("Connecting to MQTT Broker...");
-    if (mqttClient.connect("ControllinoClient", mqttUser, mqttPassword)) {
+    if (mqttClient.connect("Controllino-fan01", mqttUser, mqttPassword)) {
       Serial.println("MQTT connected!");
       mqttClient.subscribe("fan01");
     } else {
