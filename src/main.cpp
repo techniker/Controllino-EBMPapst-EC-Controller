@@ -8,15 +8,15 @@
 #include <PubSubClient.h>
 
 
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; // MAC Address
-IPAddress ip(10, 100, 0, 177); // IP of your Controllino
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+IPAddress ip(10, 100, 0, 177);
 EthernetServer server(80);
 
 // MQTT Broker settings
-const char* mqttServer = "10.22.5.5"; // Replace with your MQTT broker IP
+const char* mqttServer = "10.22.5.5";
 const int mqttPort = 1883;
-const char* mqttUser = "your_username";  // Replace with your MQTT username
-const char* mqttPassword = "your_password";  // Replace with your MQTT password
+const char* mqttUser = "mqtt";  // Replace with your MQTT username
+const char* mqttPassword = "k-u9xedDZoizdMRh";  // Replace with your MQTT password
 
 const int ledPin = CONTROLLINO_D0;
 int lastPwmValue = 0;
