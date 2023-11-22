@@ -1,17 +1,63 @@
 //<tec aett sixtopia.net>
 //Simple Controllio based EBMPapst EC fan controller
-//with integrated Web-Server
+//with integrated Web-Server and MQTT Client
 
 #include <SPI.h>
 #include <Ethernet.h>
 #include <Controllino.h>
+#include <PubSubClient.h>
 
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-IPAddress ip(10, 100, 0, 177);
+
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; // MAC Address
+IPAddress ip(10, 100, 0, 177); // IP Address of your Controllino
 EthernetServer server(80);
+
+// MQTT Broker settings
+const char* mqttServer = ""; // MQTT broker IP
+const int mqttPort = 1883; // MQTT broker Port
+const char* mqttUser = "";  // Replace with your MQTT username
+const char* mqttPassword = "";  // Replace with your MQTT password
 
 const int ledPin = CONTROLLINO_D0;
 int lastPwmValue = 0;
+
+EthernetClient ethClient;
+PubSubClient mqttClient(ethClient);
+
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("MQTT Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+
+  String message;
+  for (unsigned int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+  Serial.println(message);
+
+  // Process the mqtt message
+  if (String(topic) == "fan01") {
+    int pwmValue = message.toInt();
+    pwmValue = constrain(pwmValue, 0, 100);
+    analogWrite(ledPin, map(pwmValue, 0, 100, 0, 255));
+    lastPwmValue = pwmValue;
+    Serial.println("PWM value set via MQTT: " + String(pwmValue));
+  }
+}
+
+void connectToMqtt() {
+  while (!mqttClient.connected()) {
+    Serial.println("Connecting to MQTT Broker...");
+    if (mqttClient.connect("ControllinoClient", mqttUser, mqttPassword)) {
+      Serial.println("MQTT connected!");
+      mqttClient.subscribe("fan01");
+    } else {
+      Serial.print("MQTT connection failed, rc=");
+      Serial.print(mqttClient.state());
+      delay(2000);
+    }
+  }
+}
 
 void setup() {
   Serial.begin(115200);
@@ -21,6 +67,10 @@ void setup() {
   server.begin();
   Serial.print("Web-Server is online at ");
   Serial.println(Ethernet.localIP());
+  // Setup MQTT Client
+  mqttClient.setServer(mqttServer, mqttPort);
+  mqttClient.setCallback(mqttCallback);
+  connectToMqtt();
 }
 
 void loop() {
@@ -107,4 +157,9 @@ void loop() {
     client.stop();
     Serial.println("Client disconnected");
   }
+  // MQTT client loop
+  if (!mqttClient.connected()) {
+    connectToMqtt();
+  }
+  mqttClient.loop();
 }
