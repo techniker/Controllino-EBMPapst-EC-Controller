@@ -7,7 +7,6 @@
 #include <Controllino.h>
 #include <PubSubClient.h>
 
-
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}; // MAC Address
 IPAddress ip(10, 100, 0, 177); // IP Address of your Controllino
 EthernetServer server(80);
@@ -70,7 +69,6 @@ void setup() {
   // Setup MQTT Client
   mqttClient.setServer(mqttServer, mqttPort);
   mqttClient.setCallback(mqttCallback);
-  connectToMqtt();
 }
 
 void loop() {
@@ -96,11 +94,11 @@ void loop() {
             int pwmValue = pwmValueStr.toInt();
             pwmValue = constrain(pwmValue, 0, 100);
             analogWrite(ledPin, map(pwmValue, 0, 100, 0, 255));
+            lastPwmValue = pwmValue;
             Serial.print("PWM value set to: ");
             Serial.println(pwmValue);
-            lastPwmValue = pwmValue;
           }
-          client.println("HTTP/1.1 200 OK");
+client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println("Connection: close");
           client.println();
@@ -157,6 +155,7 @@ void loop() {
     client.stop();
     Serial.println("Client disconnected");
   }
+
   // MQTT client loop
   if (!mqttClient.connected()) {
     connectToMqtt();
