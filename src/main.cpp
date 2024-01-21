@@ -98,7 +98,7 @@ void loop() {
             Serial.print("PWM value set to: ");
             Serial.println(pwmValue);
           }
-client.println("HTTP/1.1 200 OK");
+          client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
           client.println("Connection: close");
           client.println();
