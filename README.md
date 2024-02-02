@@ -9,6 +9,7 @@ The controller is suitable for applications requiring reliable and precise fan s
 ## Features
 
 - **Web-Server Integration**: Built-in web server for easy access and control over the network.
+- **MQTT-Client Integration**: Built-in MQTT client for easy integration
 - **PWM Control**: Adjust the fan speed using Pulse Width Modulation (PWM) for precise control.
 - **User-Friendly Interface**: A clean and simple web interface, including a dark mode toggle for user comfort.
 - **Real-time Feedback**: Serial output for monitoring current fan speed and system status.
